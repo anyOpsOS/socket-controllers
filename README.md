@@ -21,7 +21,7 @@ Use class-based controllers to handle websocket events. Helps to organize your c
 
     and make sure to import it in a global place, like app.ts:
 
-    ```typescript
+    ```javascript
     import "reflect-metadata";
     ```
     
@@ -29,7 +29,7 @@ Use class-based controllers to handle websocket events. Helps to organize your c
 
 1. Create a file `MessageController.ts`
 
-    ```typescript
+    ```javascript
     import {OnConnect, SocketController, ConnectedSocket, OnDisconnect, MessageBody, OnMessage} from "socket-controllers";
 
     @SocketController()
@@ -58,7 +58,7 @@ Use class-based controllers to handle websocket events. Helps to organize your c
 
 2. Create a file `app.ts`
 
-    ```typescript
+    ```javascript
     import "es6-shim"; // this shim is optional if you are using old version of node
     import "reflect-metadata"; // this shim is required
     import {createSocketServer} from "socket-controllers";
@@ -78,7 +78,7 @@ Use class-based controllers to handle websocket events. Helps to organize your c
 Controller action marked with `@OnConnect()` decorator is called once new client connected.
 Controller action marked with `@OnDisconnect()` decorator is called once client disconnected.
 
-```typescript
+```javascript
 import {SocketController, OnConnect, OnDisconnect} from "socket-controllers";
 
 @SocketController()
@@ -101,7 +101,7 @@ export class MessageController {
 
 To get connected socket instance you need to use `@ConnectedSocket()` decorator.
 
-```typescript
+```javascript
 import {SocketController, OnMessage, ConnectedSocket} from "socket-controllers";
 
 @SocketController()
@@ -119,7 +119,7 @@ export class MessageController {
 
 To get received message body use `@MessageBody()` decorator:
 
-```typescript
+```javascript
 import {SocketController, OnMessage, MessageBody} from "socket-controllers";
 
 @SocketController()
@@ -141,7 +141,7 @@ To disable this behaviour you need to specify a `{ useConstructorUtils: false }`
 
 To get received query parameter use `@SocketQueryParam()` decorator.
 
-```typescript
+```javascript
 import {SocketController, OnMessage, MessageBody} from "socket-controllers";
 
 @SocketController()
@@ -159,7 +159,7 @@ export class MessageController {
 
 To get connected client id use `@SocketId()` decorator.
 
-```typescript
+```javascript
 import {SocketController, OnMessage, MessageBody} from "socket-controllers";
 
 @SocketController()
@@ -174,7 +174,7 @@ export class MessageController {
 
 #### Get access to using socket.io instance using `@SocketIO()` decorator
 
-```typescript
+```javascript
 import {SocketController, OnMessage, MessageBody} from "socket-controllers";
 
 @SocketController()
@@ -192,7 +192,7 @@ export class MessageController {
 
 You can use `@EmitOnSuccess` decorator:
 
-```typescript
+```javascript
 import {SocketController, OnMessage, EmitOnSuccess} from "socket-controllers";
 
 @SocketController()
@@ -209,7 +209,7 @@ export class MessageController {
 
 If you return something, it will be returned in the emitted message data:
 
-```typescript
+```javascript
 import {SocketController, OnMessage, EmitOnSuccess} from "socket-controllers";
 
 @SocketController()
@@ -230,7 +230,7 @@ export class MessageController {
 
 You can also control what message will be emitted if there is error/exception during execution:
 
-```typescript
+```javascript
 import {SocketController, OnMessage, EmitOnSuccess, EmitOnFail} from "socket-controllers";
 
 @SocketController()
@@ -257,7 +257,7 @@ In this case `save_error` message will be sent to the client with `One is equal 
 Sometimes you may want to not emit success/error message if returned result is null or undefined.
 In such cases you can use `@SkipEmitOnEmptyResult()` decorator.
 
-```typescript
+```javascript
 import {SocketController, OnMessage, EmitOnSuccess, EmitOnFail, SkipEmitOnEmptyResult} from "socket-controllers";
 
 @SocketController()
@@ -284,7 +284,7 @@ If you need to create and configure socket.io server manually,
 you can use `useSocketServer` instead of `createSocketServer` function.
 Here is example of creating socket.io server and configuring it with express:
 
-```typescript
+```javascript
 import "reflect-metadata"; // this shim is required
 import {useSocketServer} from "socket-controllers";
 
@@ -310,7 +310,7 @@ useSocketServer(io);
 You can load all controllers in once from specific directories, by specifying array of directories via options in
 `createSocketServer` or `useSocketServer`:
 
-```typescript
+```javascript
 import "reflect-metadata"; // this shim is required
 import {createSocketServer} from "socket-controllers";
 
@@ -323,7 +323,7 @@ createSocketServer(3000, {
 
 To listen to messages only of the specific namespace you can mark a controller with namespace:
 
-```typescript
+```javascript
 @SocketController("/messages")
 export class MessageController {
     // ...
@@ -332,7 +332,7 @@ export class MessageController {
 
 Also you can use dynamic namespace, like `express router` patterns:
 
-```typescript
+```javascript
 @SocketController("/messages/:userId")
 export class MessageController {
     // ...
@@ -345,7 +345,7 @@ Middlewares are the functions passed to the `socketIo.use` method.
 Middlewares allows you to define a logic that will be executed each time client connected to the server.
 To create your middlewares use `@Middleware` decorator:
 
-```typescript
+```javascript
 import {Middleware, MiddlewareInterface} from "socket-controllers";
 
 @Middleware()
@@ -363,7 +363,7 @@ export class CompressionMiddleware implements MiddlewareInterface {
 
 Controllers and middlewares should be loaded:
 
-```typescript
+```javascript
 import "reflect-metadata";
 import {createSocketServer} from "socket-controllers";
 import {MessageController} from "./MessageController";
@@ -376,7 +376,7 @@ let io = createSocketServer(3000, {
 
 Also you can load them from directories. Also you can use glob patterns:
 
-```typescript
+```javascript
 import "reflect-metadata";
 import {createSocketServer} from "socket-controllers";
 let io = createSocketServer(3000, {
@@ -391,7 +391,7 @@ let io = createSocketServer(3000, {
 middlewares. Container must be setup during application bootstrap.
 Here is example how to integrate socket-controllers with [typedi](https://github.com/pleerock/typedi):
 
-```typescript
+```javascript
 import "reflect-metadata";
 import {createSocketServer, useContainer} from "socket-controllers";
 import {Container} from "typedi";
@@ -409,7 +409,7 @@ let io = createSocketServer(3000, {
 
 That's it, now you can inject your services into your controllers:
 
-```typescript
+```javascript
 @SocketController()
 export class MessageController {
 
