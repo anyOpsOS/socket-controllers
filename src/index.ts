@@ -93,6 +93,7 @@ export * from "./decorator/SocketId";
 export * from "./decorator/SocketRequest";
 export * from "./decorator/SocketRooms";
 export * from "./decorator/SocketQueryParam";
+export * from "./decorator/SocketSessionParam";
 export * from "./decorator/ConnectedSocket";
 export * from "./decorator/OnConnect";
 export * from "./decorator/OnDisconnect";

@@ -168,6 +168,9 @@ export class SocketControllerExecutor {
                 } else if (param.type === ParamTypes.SOCKET_QUERY_PARAM) {
                     return options.socket.handshake.query[param.value];
 
+                } else if (param.type === ParamTypes.SOCKET_SESSION_PARAM) {
+                    return options.socket.request.session[param.value];
+
                 } else if (param.type === ParamTypes.SOCKET_ID) {
                     return options.socket.id;
 

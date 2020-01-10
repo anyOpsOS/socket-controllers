@@ -5,6 +5,7 @@ export type ParamType = "custom"
     | "connected-socket"
     | "socket-body"
     | "socket-query-param"
+    | "socket-session-param"
     | "socket-io"
     | "socket-id"
     | "socket-request"
@@ -21,6 +22,7 @@ export class ParamTypes {
     static CONNECTED_SOCKET: ParamType = "connected-socket";
     static SOCKET_BODY: ParamType = "socket-body";
     static SOCKET_QUERY_PARAM: ParamType = "socket-query-param";
+    static SOCKET_SESSION_PARAM: ParamType = "socket-session-param";
     static SOCKET_IO: ParamType = "socket-io";
     static SOCKET_ID: ParamType = "socket-id";
     static SOCKET_REQUEST: ParamType = "socket-request";
