@@ -100,6 +100,7 @@ export * from "./decorator/OnMessage";
 export * from "./decorator/EmitOnSuccess";
 export * from "./decorator/EmitOnFail";
 export * from "./decorator/SkipEmitOnEmptyResult";
+export * from "./decorator/ReturnAck";
 export * from "./decorator/Middleware";
 export * from "./decorator/MessageBody";
 export * from "./decorator/NspParams";

@@ -83,4 +83,8 @@ export class ActionMetadata {
         return this.results.find(resultHandler => resultHandler.type === ResultTypes.SKIP_EMIT_ON_EMPTY_RESULT);
     }
 
+    get returnAck() {
+        return this.results.find(resultHandler => resultHandler.type === ResultTypes.RETURN_ACK);
+    }
+
 }

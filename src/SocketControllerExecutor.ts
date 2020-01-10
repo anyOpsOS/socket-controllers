@@ -143,10 +143,10 @@ export class SocketControllerExecutor {
                     });
 
                 } else if (action.type === ActionTypes.MESSAGE) {
-                    socket.on(action.name, (data: any) => { // todo get multiple args
+                    socket.on(action.name, (data: any, callback: (...args: any[]) => void) => { // todo get multiple args
                         this.handleAction(action, {socket: socket, data: data})
-                            .then(result => this.handleSuccessResult(result, action, socket))
-                            .catch(error => this.handleFailResult(error, action, socket));
+                            .then(result => this.handleSuccessResult(result, action, socket, callback))
+                            .catch(error => this.handleFailResult(error, action, socket, callback));
                     });
                 }
             });
@@ -256,7 +256,13 @@ export class SocketControllerExecutor {
         }
     }
 
-    private handleSuccessResult(result: any, action: ActionMetadata, socket: any) {
+    private handleSuccessResult(result: any, action: ActionMetadata, socket: any, ackCallback?: (...args: any[]) => void) {
+        if (result !== null && result !== undefined && action.returnAck && ackCallback instanceof Function) {
+            ackCallback(result);
+        } else if ((result === null || result === undefined) && action.emitOnSuccess && !action.skipEmitOnEmptyResult) {
+            ackCallback(action.emitOnSuccess.value);
+        }
+
         if (result !== null && result !== undefined && action.emitOnSuccess) {
             const transformOptions = action.emitOnSuccess.classTransformOptions || this.classToPlainTransformOptions;
             let transformedResult = this.useClassTransformer && result instanceof Object ? classToPlain(result, transformOptions) : result;
@@ -267,7 +273,13 @@ export class SocketControllerExecutor {
         }
     }
 
-    private handleFailResult(result: any, action: ActionMetadata, socket: any) {
+    private handleFailResult(result: any, action: ActionMetadata, socket: any, ackCallback?: (...args: any[]) => void) {
+        if (result !== null && result !== undefined && action.returnAck && ackCallback instanceof Function) {
+            ackCallback(result);
+        } else if ((result === null || result === undefined) && action.emitOnFail && !action.skipEmitOnEmptyResult) {
+            ackCallback(action.emitOnFail.value);
+        }
+
         if (result !== null && result !== undefined && action.emitOnFail) {
             const transformOptions = action.emitOnSuccess.classTransformOptions || this.classToPlainTransformOptions;
             let transformedResult = this.useClassTransformer && result instanceof Object ? classToPlain(result, transformOptions) : result;
