@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="57a356f0-ca11-4020-947c-d29a122883ed" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulpfile.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample1-simple-controller/Message.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample1-simple-controller/MessageController.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample1-simple-controller/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample1-simple-controller/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample2-use-created-socket-io/Message.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample2-use-created-socket-io/MessageController.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample2-use-created-socket-io/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample2-use-created-socket-io/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample3-namespaces/Message.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample3-namespaces/MessageController.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample3-namespaces/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample3-namespaces/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample4-emitters/Message.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample4-emitters/MessageController.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample4-emitters/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample4-emitters/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample5-global-middlewares/AuthenticationMiddleware.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample5-global-middlewares/Message.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample5-global-middlewares/MessageController.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample5-global-middlewares/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample5-global-middlewares/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample6-dynamic-namespaces/Message.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample6-dynamic-namespaces/MessageController.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample6-dynamic-namespaces/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample6-dynamic-namespaces/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample7-use-middlewares/AuthenticationMiddleware.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample7-use-middlewares/Message.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample7-use-middlewares/MessageController.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample7-use-middlewares/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/sample7-use-middlewares/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CurrentUserChecker.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MiddlewareInterface.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SocketControllerExecutor.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SocketControllersOptions.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/ConnectedSocket.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/CurrentUser.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/EmitOnFail.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/EmitOnSuccess.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/MessageBody.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/Middleware.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/NspParam.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/NspParams.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/OnConnect.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/OnDisconnect.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/OnMessage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/ReturnAck.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/SkipEmitOnEmptyResult.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/SocketController.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/SocketIO.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/SocketId.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/SocketQueryParam.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/SocketRequest.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/SocketRooms.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/SocketSessionParam.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decorator/UseMiddleware.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/error/ParameterParseJsonError.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata-builder/MetadataArgsStorage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata-builder/MetadataBuilder.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/ActionMetadata.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/ControllerMetadata.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/MiddlewareMetadata.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/ParamMetadata.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/ResultMetadata.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/UseMetadata.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/args/ActionMetadataArgs.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/args/MiddlewareMetadataArgs.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/args/ParamMetadataArgs.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/args/ResultMetadataArgs.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/args/SocketControllerMetadataArgs.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/args/UseMetadataArgs.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/types/ActionTypes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/types/ParamTypes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/metadata/types/ResultTypes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/DirectoryExportedClassesLoader.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tslint.json" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="next" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1WDvRO8aner0iwShrOEngTwfXaa" />
+  <component name="PropertiesComponent">
+    <property name="TF_FMT" value="false" />
+    <property name="TODO_SCOPE" value="All Places" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="C:\Users\nada\WebstormProjects\socket-controllers\node_modules\typescript\lib" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.build" />
+        <item itemvalue="npm.test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="57a356f0-ca11-4020-947c-d29a122883ed" name="Default Changelist" comment="" />
+      <created>1578696970929</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1578696970929</updated>
+      <workItem from="1578696972058" duration="2539000" />
+    </task>
+    <task id="LOCAL-00001" summary="feat: test @ReturnAck">
+      <created>1578698368548</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1578698368548</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat: test @SocketSessionParam">
+      <created>1578698639972</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1578698639972</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: test @ReturnAck" />
+    <MESSAGE value="feat: test @SocketSessionParam" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: test @SocketSessionParam" />
+  </component>
+</project>
