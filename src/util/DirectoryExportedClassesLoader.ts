@@ -3,7 +3,7 @@ import * as path from "path";
 /**
  * Loads all exported classes from the given directory.
  */
-export function importClassesFromDirectories(directories: string[], formats = [".js", ".ts"]): Function[] {
+export async function importClassesFromDirectories(directories: string[], formats = [".js", ".ts"]): Promise<Function[]> {
 
     const loadFileClasses = function (exported: any, allLoaded: Function[]) {
         if (exported instanceof Function) {
@@ -20,17 +20,22 @@ export function importClassesFromDirectories(directories: string[], formats = ["
     };
 
     const allFiles = directories.reduce((allDirs, dir) => {
-        return allDirs.concat(require("glob").sync(path.normalize(dir)));
+
+        // Do not glob Network requests
+        const glob: string[] = dir.startsWith("https://") ? [dir] : require("glob").sync(path.normalize(dir));
+
+        return allDirs.concat(glob);
     }, [] as string[]);
 
-    const dirs = allFiles
+    const dirs = await Promise.all(allFiles
         .filter(file => {
             const dtsExtension = file.substring(file.length - 5, file.length);
             return formats.indexOf(path.extname(file)) !== -1 && dtsExtension !== ".d.ts";
         })
         .map(file => {
-            return require(file);
-        });
+            // return require(file);
+            return import(file);
+        }));
 
     return loadFileClasses(dirs, []);
 }

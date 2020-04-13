@@ -11,17 +11,17 @@ import {getFromContainer} from "./container";
 /**
  * Registers all loaded actions in your express application.
  */
-export function useSocketServer<T>(io: T, options?: SocketControllersOptions): T {
-    createExecutor(io, options || {});
+export async function useSocketServer<T>(io: T, options?: SocketControllersOptions): Promise<T> {
+    await createExecutor(io, options || {});
     return io;
 }
 
 /**
  * Registers all loaded actions in your express application.
  */
-export function createSocketServer(port: number, options?: SocketControllersOptions): any {
+export async function createSocketServer(port: number, options?: SocketControllersOptions): Promise<any> {
     const io = require("socket.io")(port);
-    createExecutor(io, options || {});
+    await createExecutor(io, options || {});
     return io;
 }
 
@@ -42,20 +42,20 @@ function getSocketExecutor() {
 /**
  * Registers all loaded actions in your express application.
  */
-function createExecutor(io: any, options: SocketControllersOptions): void {
+async function createExecutor(io: any, options: SocketControllersOptions): Promise<void> {
 
     // second import all controllers and middlewares and error handlers
     let controllerClasses: Function[];
     if (options && options.controllers && options.controllers.length)
         controllerClasses = (options.controllers as any[]).filter(controller => controller instanceof Function);
     const controllerDirs = (options.controllers as any[]).filter(controller => typeof controller === "string");
-    controllerClasses.push(...importClassesFromDirectories(controllerDirs));
+    controllerClasses.push(...await importClassesFromDirectories(controllerDirs));
 
     let middlewareClasses: Function[];
     if (options && options.middlewares && options.middlewares.length) {
         middlewareClasses = (options.middlewares as any[]).filter(controller => controller instanceof Function);
         const middlewareDirs = (options.middlewares as any[]).filter(controller => typeof controller === "string");
-        middlewareClasses.push(...importClassesFromDirectories(middlewareDirs));
+        middlewareClasses.push(...await importClassesFromDirectories(middlewareDirs));
     }
 
     // run socket controller register and other operations
