@@ -108,6 +108,17 @@ export class Gulpfile {
     }
 
     /**
+     * This task will replace all typescript code blocks in the README (since npm does not support typescript syntax
+     * highlighting) and copy this README file into the package folder.
+     */
+    @Task()
+    replaceRequireToImport() {
+        return gulp.src("./build/package/util/DirectoryExportedClassesLoader.js")
+            .pipe(replace("return Promise.resolve().then(() => require(file));", "return import(file);"))
+            .pipe(gulp.dest("./build/package/util/"));
+    }
+
+    /**
      * Creates a package that can be published to npm.
      */
     @SequenceTask()
@@ -118,7 +129,7 @@ export class Gulpfile {
             "packageCompile",
             "packageMoveCompiledFiles",
             "packageClearCompileDirectory",
-            ["packagePreparePackageFile", "packageReadmeFile"]
+            ["packagePreparePackageFile", "packageReadmeFile", "replaceRequireToImport"]
         ];
     }
 
