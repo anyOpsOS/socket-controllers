@@ -9,11 +9,11 @@ export async function importClassesFromDirectories(directories: string[], format
         if (exported instanceof Function) {
             allLoaded.push(exported);
 
-        } else if (exported instanceof Object) {
-            Object.keys(exported).forEach(key => loadFileClasses(exported[key], allLoaded));
-
         } else if (exported instanceof Array) {
             exported.forEach((i: any) => loadFileClasses(i, allLoaded));
+
+        } else if (exported instanceof Object || typeof exported === "object") {
+            Object.keys(exported).forEach(key => loadFileClasses(exported[key], allLoaded));
         }
 
         return allLoaded;
