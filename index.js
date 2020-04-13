@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const MetadataArgsStorage_1 = require("./metadata-builder/MetadataArgsStorage");
 const DirectoryExportedClassesLoader_1 = require("./util/DirectoryExportedClassesLoader");
 const SocketControllerExecutor_1 = require("./SocketControllerExecutor");
+const container_1 = require("./container");
 // -------------------------------------------------------------------------
 // Main Functions
 // -------------------------------------------------------------------------
@@ -27,10 +28,22 @@ async function createSocketServer(port, options) {
 }
 exports.createSocketServer = createSocketServer;
 /**
+ * Gets socket.io instance
+ */
+function getSocketIO() {
+    return getSocketExecutor().io;
+}
+exports.getSocketIO = getSocketIO;
+/**
+ * Get socket executor
+ */
+function getSocketExecutor() {
+    return container_1.getFromContainer(SocketControllerExecutor_1.SocketControllerExecutor);
+}
+/**
  * Registers all loaded actions in your express application.
  */
 async function createExecutor(io, options) {
-    const executor = new SocketControllerExecutor_1.SocketControllerExecutor(io);
     // second import all controllers and middlewares and error handlers
     let controllerClasses;
     if (options && options.controllers && options.controllers.length)
@@ -43,16 +56,10 @@ async function createExecutor(io, options) {
         const middlewareDirs = options.middlewares.filter(controller => typeof controller === "string");
         middlewareClasses.push(...await DirectoryExportedClassesLoader_1.importClassesFromDirectories(middlewareDirs));
     }
-    if (options.useClassTransformer !== undefined) {
-        executor.useClassTransformer = options.useClassTransformer;
-    }
-    else {
-        executor.useClassTransformer = true;
-    }
-    executor.classToPlainTransformOptions = options.classToPlainTransformOptions;
-    executor.plainToClassTransformOptions = options.plainToClassTransformOptions;
     // run socket controller register and other operations
-    executor.execute(controllerClasses, middlewareClasses);
+    getSocketExecutor()
+        .init(io, options)
+        .execute(controllerClasses, middlewareClasses);
 }
 // -------------------------------------------------------------------------
 // Global Metadata Storage
@@ -70,6 +77,25 @@ exports.defaultMetadataArgsStorage = defaultMetadataArgsStorage;
 // Commonly Used exports
 // -------------------------------------------------------------------------
 __export(require("./container"));
-__export(require("./decorators"));
+// decorators
+__export(require("./decorator/SocketController"));
+__export(require("./decorator/SocketIO"));
+__export(require("./decorator/SocketId"));
+__export(require("./decorator/SocketRequest"));
+__export(require("./decorator/SocketRooms"));
+__export(require("./decorator/SocketQueryParam"));
+__export(require("./decorator/SocketSessionParam"));
+__export(require("./decorator/ConnectedSocket"));
+__export(require("./decorator/OnConnect"));
+__export(require("./decorator/OnDisconnect"));
+__export(require("./decorator/OnMessage"));
+__export(require("./decorator/EmitOnSuccess"));
+__export(require("./decorator/EmitOnFail"));
+__export(require("./decorator/SkipEmitOnEmptyResult"));
+__export(require("./decorator/ReturnAck"));
+__export(require("./decorator/Middleware"));
+__export(require("./decorator/MessageBody"));
+__export(require("./decorator/NspParams"));
+__export(require("./decorator/NspParam"));
 
 //# sourceMappingURL=index.js.map

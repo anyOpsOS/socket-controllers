@@ -10,6 +10,7 @@ class MetadataArgsStorage {
         // -------------------------------------------------------------------------
         this.controllers = [];
         this.middlewares = [];
+        this.uses = [];
         this.actions = [];
         this.results = [];
         this.params = [];
@@ -29,6 +30,11 @@ class MetadataArgsStorage {
     }
     findActionsWithTarget(target) {
         return this.actions.filter(action => action.target === target);
+    }
+    filterUsesWithTarget(target) {
+        return this.uses.filter(use => {
+            return use.target === target;
+        });
     }
     findResutlsWithTargetAndMethod(target, methodName) {
         return this.results.filter(result => {

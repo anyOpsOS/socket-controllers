@@ -11,15 +11,22 @@ const pathToRegexp = require("path-to-regexp");
  */
 class SocketControllerExecutor {
     // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
-    constructor(io) {
-        this.io = io;
-        this.metadataBuilder = new MetadataBuilder_1.MetadataBuilder();
-    }
-    // -------------------------------------------------------------------------
     // Public Methods
     // -------------------------------------------------------------------------
+    init(io, options) {
+        this.io = io;
+        this.metadataBuilder = new MetadataBuilder_1.MetadataBuilder();
+        if (options.useClassTransformer !== undefined) {
+            this.useClassTransformer = options.useClassTransformer;
+        }
+        else {
+            this.useClassTransformer = true;
+        }
+        this.classToPlainTransformOptions = options.classToPlainTransformOptions;
+        this.plainToClassTransformOptions = options.plainToClassTransformOptions;
+        this.currentUserChecker = options.currentUserChecker;
+        return this;
+    }
     execute(controllerClasses, middlewareClasses) {
         this.registerControllers(controllerClasses);
         this.registerMiddlewares(middlewareClasses);
@@ -62,6 +69,11 @@ class SocketControllerExecutor {
     }
     handleConnection(controllers, socket) {
         controllers.forEach(controller => {
+            controller.uses.forEach(middleware => {
+                socket.use((pocket, next) => {
+                    middleware.instance.use(pocket, next); // TODO: pass socket instance?
+                });
+            });
             controller.actions.forEach(action => {
                 if (action.type === ActionTypes_1.ActionTypes.CONNECT) {
                     this.handleAction(action, { socket: socket })
@@ -76,10 +88,10 @@ class SocketControllerExecutor {
                     });
                 }
                 else if (action.type === ActionTypes_1.ActionTypes.MESSAGE) {
-                    socket.on(action.name, (data) => {
+                    socket.on(action.name, (data, callback) => {
                         this.handleAction(action, { socket: socket, data: data })
-                            .then(result => this.handleSuccessResult(result, action, socket))
-                            .catch(error => this.handleFailResult(error, action, socket));
+                            .then(result => this.handleSuccessResult(result, action, socket, callback))
+                            .catch(error => this.handleFailResult(error, action, socket, callback));
                     });
                 }
             });
@@ -99,6 +111,9 @@ class SocketControllerExecutor {
             else if (param.type === ParamTypes_1.ParamTypes.SOCKET_QUERY_PARAM) {
                 return options.socket.handshake.query[param.value];
             }
+            else if (param.type === ParamTypes_1.ParamTypes.SOCKET_SESSION_PARAM) {
+                return options.socket.request.session[param.value];
+            }
             else if (param.type === ParamTypes_1.ParamTypes.SOCKET_ID) {
                 return options.socket.id;
             }
@@ -114,6 +129,9 @@ class SocketControllerExecutor {
             else if (param.type === ParamTypes_1.ParamTypes.NAMESPACE_PARAM) {
                 const params = this.handleNamespaceParams(options.socket, action, param);
                 return params[param.value];
+            }
+            else if (param.type === ParamTypes_1.ParamTypes.CURRENT_USER) {
+                return this.currentUserChecker(options.socket);
             }
             else {
                 return this.handleParam(param, options);
@@ -175,7 +193,13 @@ class SocketControllerExecutor {
             throw new ParameterParseJsonError_1.ParameterParseJsonError(value);
         }
     }
-    handleSuccessResult(result, action, socket) {
+    handleSuccessResult(result, action, socket, ackCallback) {
+        if (result !== null && result !== undefined && action.returnAck && ackCallback instanceof Function) {
+            ackCallback(result);
+        }
+        else if ((result === null || result === undefined) && action.emitOnSuccess && !action.skipEmitOnEmptyResult) {
+            ackCallback(action.emitOnSuccess.value);
+        }
         if (result !== null && result !== undefined && action.emitOnSuccess) {
             const transformOptions = action.emitOnSuccess.classTransformOptions || this.classToPlainTransformOptions;
             let transformedResult = this.useClassTransformer && result instanceof Object ? class_transformer_1.classToPlain(result, transformOptions) : result;
@@ -185,7 +209,13 @@ class SocketControllerExecutor {
             socket.emit(action.emitOnSuccess.value);
         }
     }
-    handleFailResult(result, action, socket) {
+    handleFailResult(result, action, socket, ackCallback) {
+        if (result !== null && result !== undefined && action.returnAck && ackCallback instanceof Function) {
+            ackCallback(result);
+        }
+        else if ((result === null || result === undefined) && action.emitOnFail && !action.skipEmitOnEmptyResult) {
+            ackCallback(action.emitOnFail.value);
+        }
         if (result !== null && result !== undefined && action.emitOnFail) {
             const transformOptions = action.emitOnSuccess.classTransformOptions || this.classToPlainTransformOptions;
             let transformedResult = this.useClassTransformer && result instanceof Object ? class_transformer_1.classToPlain(result, transformOptions) : result;

@@ -6,6 +6,7 @@ const ActionMetadata_1 = require("../metadata/ActionMetadata");
 const ParamMetadata_1 = require("../metadata/ParamMetadata");
 const MiddlewareMetadata_1 = require("../metadata/MiddlewareMetadata");
 const ResultMetadata_1 = require("../metadata/ResultMetadata");
+const UseMetadata_1 = require("../metadata/UseMetadata");
 /**
  * Builds metadata from the given metadata arguments.
  */
@@ -35,6 +36,7 @@ class MetadataBuilder {
         return controllers.map(controllerArgs => {
             const controller = new ControllerMetadata_1.ControllerMetadata(controllerArgs);
             controller.actions = this.createActions(controller);
+            controller.uses = this.createControllerUses(controller);
             return controller;
         });
     }
@@ -47,6 +49,14 @@ class MetadataBuilder {
             action.results = this.createResults(action);
             return action;
         });
+    }
+    /**
+     * Creates use metadatas for controllers.
+     */
+    createControllerUses(controller) {
+        return index_1.defaultMetadataArgsStorage()
+            .filterUsesWithTarget(controller.target)
+            .map(useArgs => new UseMetadata_1.UseMetadata(useArgs));
     }
     createParams(action) {
         return index_1.defaultMetadataArgsStorage()

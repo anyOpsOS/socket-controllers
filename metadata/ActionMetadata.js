@@ -30,6 +30,9 @@ class ActionMetadata {
     get skipEmitOnEmptyResult() {
         return this.results.find(resultHandler => resultHandler.type === ResultTypes_1.ResultTypes.SKIP_EMIT_ON_EMPTY_RESULT);
     }
+    get returnAck() {
+        return this.results.find(resultHandler => resultHandler.type === ResultTypes_1.ResultTypes.RETURN_ACK);
+    }
 }
 exports.ActionMetadata = ActionMetadata;
 

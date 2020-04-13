@@ -1,9 +1,10 @@
 import { ClassTransformOptions } from "class-transformer";
+import { CurrentUserChecker } from "./CurrentUserChecker";
+import { SocketControllersOptions } from "./SocketControllersOptions";
 /**
  * Registers controllers and actions in the given server framework.
  */
 export declare class SocketControllerExecutor {
-    private io;
     /**
      * Indicates if class-transformer package should be used to perform message body serialization / deserialization.
      * By default its enabled.
@@ -19,8 +20,16 @@ export declare class SocketControllerExecutor {
      * This operation is being executed when parsing user parameters.
      */
     plainToClassTransformOptions: ClassTransformOptions;
+    /**
+     * Special function used to get currently authorized user.
+     */
+    currentUserChecker: CurrentUserChecker;
+    /**
+     * Specified socket.io instance
+     */
+    io: any;
     private metadataBuilder;
-    constructor(io: any);
+    init(io: any, options: SocketControllersOptions): this;
     execute(controllerClasses?: Function[], middlewareClasses?: Function[]): void;
     /**
      * Registers middlewares.
