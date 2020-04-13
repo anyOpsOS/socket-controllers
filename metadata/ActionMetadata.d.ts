@@ -38,5 +38,4 @@ export declare class ActionMetadata {
     readonly emitOnSuccess: ResultMetadata;
     readonly emitOnFail: ResultMetadata;
     readonly skipEmitOnEmptyResult: ResultMetadata;
-    readonly returnAck: ResultMetadata;
 }

@@ -1,4 +1,4 @@
 /**
  * Loads all exported classes from the given directory.
  */
-export declare function importClassesFromDirectories(directories: string[], formats?: string[]): Function[];
+export declare function importClassesFromDirectories(directories: string[], formats?: string[]): Promise<Function[]>;

@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ParamMetadata = /** @class */ (function () {
+class ParamMetadata {
     // -------------------------------------------------------------------------
     // Public Methods
     // -------------------------------------------------------------------------
-    function ParamMetadata(actionMetadata, args) {
+    constructor(actionMetadata, args) {
         this.actionMetadata = actionMetadata;
         this.target = args.target;
         this.method = args.method;
@@ -15,8 +15,7 @@ var ParamMetadata = /** @class */ (function () {
         this.classTransformOptions = args.classTransformOptions;
         this.value = args.value;
     }
-    return ParamMetadata;
-}());
+}
 exports.ParamMetadata = ParamMetadata;
 
 //# sourceMappingURL=ParamMetadata.js.map

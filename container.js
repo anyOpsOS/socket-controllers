@@ -4,22 +4,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Container to be used by this library for inversion control. If container was not implicitly set then by default
  * container simply creates a new instance of the given class.
  */
-var defaultContainer = new (/** @class */ (function () {
-    function class_1() {
+const defaultContainer = new (class {
+    constructor() {
         this.instances = [];
     }
-    class_1.prototype.get = function (someClass) {
-        var instance = this.instances.find(function (instance) { return instance.type === someClass; });
+    get(someClass) {
+        let instance = this.instances.find(instance => instance.type === someClass);
         if (!instance) {
             instance = { type: someClass, object: new someClass() };
             this.instances.push(instance);
         }
         return instance.object;
-    };
-    return class_1;
-}()))();
-var userContainer;
-var userContainerOptions;
+    }
+})();
+let userContainer;
+let userContainerOptions;
 /**
  * Sets container to be used by this library.
  */
@@ -34,7 +33,7 @@ exports.useContainer = useContainer;
 function getFromContainer(someClass) {
     if (userContainer) {
         try {
-            var instance = userContainer.get(someClass);
+            const instance = userContainer.get(someClass);
             if (instance)
                 return instance;
             if (!userContainerOptions || !userContainerOptions.fallback)

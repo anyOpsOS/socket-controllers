@@ -3,14 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Static access to action types.
  */
-var ActionTypes = /** @class */ (function () {
-    function ActionTypes() {
-    }
-    ActionTypes.MESSAGE = "message";
-    ActionTypes.CONNECT = "connection";
-    ActionTypes.DISCONNECT = "disconnection";
-    return ActionTypes;
-}());
+class ActionTypes {
+}
+ActionTypes.MESSAGE = "message";
+ActionTypes.CONNECT = "connection";
+ActionTypes.DISCONNECT = "disconnection";
 exports.ActionTypes = ActionTypes;
 
 //# sourceMappingURL=ActionTypes.js.map

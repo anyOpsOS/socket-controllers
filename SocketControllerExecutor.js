@@ -1,124 +1,103 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var MetadataBuilder_1 = require("./metadata-builder/MetadataBuilder");
-var class_transformer_1 = require("class-transformer");
-var ActionTypes_1 = require("./metadata/types/ActionTypes");
-var ParameterParseJsonError_1 = require("./error/ParameterParseJsonError");
-var ParamTypes_1 = require("./metadata/types/ParamTypes");
-var pathToRegexp = require("path-to-regexp");
+const MetadataBuilder_1 = require("./metadata-builder/MetadataBuilder");
+const class_transformer_1 = require("class-transformer");
+const ActionTypes_1 = require("./metadata/types/ActionTypes");
+const ParameterParseJsonError_1 = require("./error/ParameterParseJsonError");
+const ParamTypes_1 = require("./metadata/types/ParamTypes");
+const pathToRegexp = require("path-to-regexp");
 /**
  * Registers controllers and actions in the given server framework.
  */
-var SocketControllerExecutor = /** @class */ (function () {
-    function SocketControllerExecutor() {
+class SocketControllerExecutor {
+    // -------------------------------------------------------------------------
+    // Constructor
+    // -------------------------------------------------------------------------
+    constructor(io) {
+        this.io = io;
+        this.metadataBuilder = new MetadataBuilder_1.MetadataBuilder();
     }
     // -------------------------------------------------------------------------
     // Public Methods
     // -------------------------------------------------------------------------
-    SocketControllerExecutor.prototype.init = function (io, options) {
-        this.io = io;
-        this.metadataBuilder = new MetadataBuilder_1.MetadataBuilder();
-        if (options.useClassTransformer !== undefined) {
-            this.useClassTransformer = options.useClassTransformer;
-        }
-        else {
-            this.useClassTransformer = true;
-        }
-        this.classToPlainTransformOptions = options.classToPlainTransformOptions;
-        this.plainToClassTransformOptions = options.plainToClassTransformOptions;
-        this.currentUserChecker = options.currentUserChecker;
-        return this;
-    };
-    SocketControllerExecutor.prototype.execute = function (controllerClasses, middlewareClasses) {
+    execute(controllerClasses, middlewareClasses) {
         this.registerControllers(controllerClasses);
         this.registerMiddlewares(middlewareClasses);
-    };
+    }
     // -------------------------------------------------------------------------
     // Private Methods
     // -------------------------------------------------------------------------
     /**
      * Registers middlewares.
      */
-    SocketControllerExecutor.prototype.registerMiddlewares = function (classes) {
-        var _this = this;
-        var middlewares = this.metadataBuilder.buildMiddlewareMetadata(classes);
+    registerMiddlewares(classes) {
+        const middlewares = this.metadataBuilder.buildMiddlewareMetadata(classes);
         middlewares
-            .sort(function (middleware1, middleware2) { return middleware1.priority - middleware2.priority; })
-            .forEach(function (middleware) {
-            _this.io.use(function (socket, next) {
+            .sort((middleware1, middleware2) => middleware1.priority - middleware2.priority)
+            .forEach(middleware => {
+            this.io.use((socket, next) => {
                 middleware.instance.use(socket, next);
             });
         });
         return this;
-    };
+    }
     /**
      * Registers controllers.
      */
-    SocketControllerExecutor.prototype.registerControllers = function (classes) {
-        var _this = this;
-        var controllers = this.metadataBuilder.buildControllerMetadata(classes);
-        var controllersWithoutNamespaces = controllers.filter(function (ctrl) { return !ctrl.namespace; });
-        var controllersWithNamespaces = controllers.filter(function (ctrl) { return !!ctrl.namespace; });
+    registerControllers(classes) {
+        const controllers = this.metadataBuilder.buildControllerMetadata(classes);
+        const controllersWithoutNamespaces = controllers.filter(ctrl => !ctrl.namespace);
+        const controllersWithNamespaces = controllers.filter(ctrl => !!ctrl.namespace);
         // register controllers without namespaces
-        this.io.on("connection", function (socket) { return _this.handleConnection(controllersWithoutNamespaces, socket); });
+        this.io.on("connection", (socket) => this.handleConnection(controllersWithoutNamespaces, socket));
         // register controllers with namespaces
-        controllersWithNamespaces.forEach(function (controller) {
-            var namespace = controller.namespace;
+        controllersWithNamespaces.forEach(controller => {
+            let namespace = controller.namespace;
             if (!(namespace instanceof RegExp)) {
                 namespace = pathToRegexp(namespace);
             }
-            _this.io.of(namespace).on("connection", function (socket) { return _this.handleConnection([controller], socket); });
+            this.io.of(namespace).on("connection", (socket) => this.handleConnection([controller], socket));
         });
         return this;
-    };
-    SocketControllerExecutor.prototype.handleConnection = function (controllers, socket) {
-        var _this = this;
-        controllers.forEach(function (controller) {
-            controller.uses.forEach(function (middleware) {
-                socket.use(function (pocket, next) {
-                    middleware.instance.use(pocket, next); // TODO: pass socket instance?
-                });
-            });
-            controller.actions.forEach(function (action) {
+    }
+    handleConnection(controllers, socket) {
+        controllers.forEach(controller => {
+            controller.actions.forEach(action => {
                 if (action.type === ActionTypes_1.ActionTypes.CONNECT) {
-                    _this.handleAction(action, { socket: socket })
-                        .then(function (result) { return _this.handleSuccessResult(result, action, socket); })
-                        .catch(function (error) { return _this.handleFailResult(error, action, socket); });
+                    this.handleAction(action, { socket: socket })
+                        .then(result => this.handleSuccessResult(result, action, socket))
+                        .catch(error => this.handleFailResult(error, action, socket));
                 }
                 else if (action.type === ActionTypes_1.ActionTypes.DISCONNECT) {
-                    socket.on("disconnect", function () {
-                        _this.handleAction(action, { socket: socket })
-                            .then(function (result) { return _this.handleSuccessResult(result, action, socket); })
-                            .catch(function (error) { return _this.handleFailResult(error, action, socket); });
+                    socket.on("disconnect", () => {
+                        this.handleAction(action, { socket: socket })
+                            .then(result => this.handleSuccessResult(result, action, socket))
+                            .catch(error => this.handleFailResult(error, action, socket));
                     });
                 }
                 else if (action.type === ActionTypes_1.ActionTypes.MESSAGE) {
-                    socket.on(action.name, function (data, callback) {
-                        _this.handleAction(action, { socket: socket, data: data })
-                            .then(function (result) { return _this.handleSuccessResult(result, action, socket, callback); })
-                            .catch(function (error) { return _this.handleFailResult(error, action, socket, callback); });
+                    socket.on(action.name, (data) => {
+                        this.handleAction(action, { socket: socket, data: data })
+                            .then(result => this.handleSuccessResult(result, action, socket))
+                            .catch(error => this.handleFailResult(error, action, socket));
                     });
                 }
             });
         });
-    };
-    SocketControllerExecutor.prototype.handleAction = function (action, options) {
-        var _this = this;
+    }
+    handleAction(action, options) {
         // compute all parameters
-        var paramsPromises = action.params
-            .sort(function (param1, param2) { return param1.index - param2.index; })
-            .map(function (param) {
+        const paramsPromises = action.params
+            .sort((param1, param2) => param1.index - param2.index)
+            .map(param => {
             if (param.type === ParamTypes_1.ParamTypes.CONNECTED_SOCKET) {
                 return options.socket;
             }
             else if (param.type === ParamTypes_1.ParamTypes.SOCKET_IO) {
-                return _this.io;
+                return this.io;
             }
             else if (param.type === ParamTypes_1.ParamTypes.SOCKET_QUERY_PARAM) {
                 return options.socket.handshake.query[param.value];
-            }
-            else if (param.type === ParamTypes_1.ParamTypes.SOCKET_SESSION_PARAM) {
-                return options.socket.request.session[param.value];
             }
             else if (param.type === ParamTypes_1.ParamTypes.SOCKET_ID) {
                 return options.socket.id;
@@ -130,40 +109,37 @@ var SocketControllerExecutor = /** @class */ (function () {
                 return options.socket.rooms;
             }
             else if (param.type === ParamTypes_1.ParamTypes.NAMESPACE_PARAMS) {
-                return _this.handleNamespaceParams(options.socket, action, param);
+                return this.handleNamespaceParams(options.socket, action, param);
             }
             else if (param.type === ParamTypes_1.ParamTypes.NAMESPACE_PARAM) {
-                var params = _this.handleNamespaceParams(options.socket, action, param);
+                const params = this.handleNamespaceParams(options.socket, action, param);
                 return params[param.value];
             }
-            else if (param.type === ParamTypes_1.ParamTypes.CURRENT_USER) {
-                return _this.currentUserChecker(options.socket);
-            }
             else {
-                return _this.handleParam(param, options);
+                return this.handleParam(param, options);
             }
         });
         // after all parameters are computed
-        var paramsPromise = Promise.all(paramsPromises).catch(function (error) {
+        const paramsPromise = Promise.all(paramsPromises).catch(error => {
             console.log("Error during computation params of the socket controller: ", error);
             throw error;
         });
-        return paramsPromise.then(function (params) {
+        return paramsPromise.then(params => {
             return action.executeAction(params);
         });
-    };
-    SocketControllerExecutor.prototype.handleParam = function (param, options) {
-        var value = options.data;
+    }
+    handleParam(param, options) {
+        let value = options.data;
         if (value !== null && value !== undefined && value !== "")
             value = this.handleParamFormat(value, param);
         // if transform function is given for this param then apply it
         if (param.transform)
             value = param.transform(value, options.socket);
         return value;
-    };
-    SocketControllerExecutor.prototype.handleParamFormat = function (value, param) {
-        var format = param.reflectedType;
-        var formatName = format instanceof Function && format.name ? format.name : format instanceof String ? format : "";
+    }
+    handleParamFormat(value, param) {
+        const format = param.reflectedType;
+        const formatName = format instanceof Function && format.name ? format.name : format instanceof String ? format : "";
         switch (formatName.toLowerCase()) {
             case "number":
                 return +value;
@@ -178,17 +154,17 @@ var SocketControllerExecutor = /** @class */ (function () {
                 }
                 return !!value;
             default:
-                var isObjectFormat = format instanceof Function || formatName.toLowerCase() === "object";
+                const isObjectFormat = format instanceof Function || formatName.toLowerCase() === "object";
                 if (value && isObjectFormat)
                     value = this.parseParamValue(value, param);
         }
         return value;
-    };
-    SocketControllerExecutor.prototype.parseParamValue = function (value, paramMetadata) {
+    }
+    parseParamValue(value, paramMetadata) {
         try {
-            var parseValue = typeof value === "string" ? JSON.parse(value) : value;
+            const parseValue = typeof value === "string" ? JSON.parse(value) : value;
             if (paramMetadata.reflectedType !== Object && paramMetadata.reflectedType && this.useClassTransformer) {
-                var options = paramMetadata.classTransformOptions || this.plainToClassTransformOptions;
+                const options = paramMetadata.classTransformOptions || this.plainToClassTransformOptions;
                 return class_transformer_1.plainToClass(paramMetadata.reflectedType, parseValue, options);
             }
             else {
@@ -198,33 +174,21 @@ var SocketControllerExecutor = /** @class */ (function () {
         catch (er) {
             throw new ParameterParseJsonError_1.ParameterParseJsonError(value);
         }
-    };
-    SocketControllerExecutor.prototype.handleSuccessResult = function (result, action, socket, ackCallback) {
-        if (result !== null && result !== undefined && action.returnAck && ackCallback instanceof Function) {
-            ackCallback(result);
-        }
-        else if ((result === null || result === undefined) && action.emitOnSuccess && !action.skipEmitOnEmptyResult) {
-            ackCallback(action.emitOnSuccess.value);
-        }
+    }
+    handleSuccessResult(result, action, socket) {
         if (result !== null && result !== undefined && action.emitOnSuccess) {
-            var transformOptions = action.emitOnSuccess.classTransformOptions || this.classToPlainTransformOptions;
-            var transformedResult = this.useClassTransformer && result instanceof Object ? class_transformer_1.classToPlain(result, transformOptions) : result;
+            const transformOptions = action.emitOnSuccess.classTransformOptions || this.classToPlainTransformOptions;
+            let transformedResult = this.useClassTransformer && result instanceof Object ? class_transformer_1.classToPlain(result, transformOptions) : result;
             socket.emit(action.emitOnSuccess.value, transformedResult);
         }
         else if ((result === null || result === undefined) && action.emitOnSuccess && !action.skipEmitOnEmptyResult) {
             socket.emit(action.emitOnSuccess.value);
         }
-    };
-    SocketControllerExecutor.prototype.handleFailResult = function (result, action, socket, ackCallback) {
-        if (result !== null && result !== undefined && action.returnAck && ackCallback instanceof Function) {
-            ackCallback(result);
-        }
-        else if ((result === null || result === undefined) && action.emitOnFail && !action.skipEmitOnEmptyResult) {
-            ackCallback(action.emitOnFail.value);
-        }
+    }
+    handleFailResult(result, action, socket) {
         if (result !== null && result !== undefined && action.emitOnFail) {
-            var transformOptions = action.emitOnSuccess.classTransformOptions || this.classToPlainTransformOptions;
-            var transformedResult = this.useClassTransformer && result instanceof Object ? class_transformer_1.classToPlain(result, transformOptions) : result;
+            const transformOptions = action.emitOnSuccess.classTransformOptions || this.classToPlainTransformOptions;
+            let transformedResult = this.useClassTransformer && result instanceof Object ? class_transformer_1.classToPlain(result, transformOptions) : result;
             if (result instanceof Error && !Object.keys(transformedResult).length) {
                 transformedResult = result.toString();
             }
@@ -233,20 +197,18 @@ var SocketControllerExecutor = /** @class */ (function () {
         else if ((result === null || result === undefined) && action.emitOnFail && !action.skipEmitOnEmptyResult) {
             socket.emit(action.emitOnFail.value);
         }
-    };
-    SocketControllerExecutor.prototype.handleNamespaceParams = function (socket, action, param) {
-        var _this = this;
-        var keys = [];
-        var regexp = pathToRegexp(action.controllerMetadata.namespace, keys);
-        var parts = regexp.exec(socket.nsp.name);
-        var params = [];
-        keys.forEach(function (key, index) {
-            params[key.name] = _this.handleParamFormat(parts[index + 1], param);
+    }
+    handleNamespaceParams(socket, action, param) {
+        const keys = [];
+        const regexp = pathToRegexp(action.controllerMetadata.namespace, keys);
+        const parts = regexp.exec(socket.nsp.name);
+        const params = [];
+        keys.forEach((key, index) => {
+            params[key.name] = this.handleParamFormat(parts[index + 1], param);
         });
         return params;
-    };
-    return SocketControllerExecutor;
-}());
+    }
+}
 exports.SocketControllerExecutor = SocketControllerExecutor;
 
 //# sourceMappingURL=SocketControllerExecutor.js.map

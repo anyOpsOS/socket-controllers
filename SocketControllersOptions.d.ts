@@ -1,5 +1,4 @@
 import { ClassTransformOptions } from "class-transformer";
-import { CurrentUserChecker } from "./CurrentUserChecker";
 /**
  * Socket controllers initialization options.
  */
@@ -27,8 +26,4 @@ export interface SocketControllersOptions {
      * This operation is being executed when parsing user parameters.
      */
     plainToClassTransformOptions?: ClassTransformOptions;
-    /**
-     * Special function used to get currently authorized user.
-     */
-    currentUserChecker?: CurrentUserChecker;
 }

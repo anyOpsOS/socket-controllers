@@ -3,14 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Storage all metadatas read from decorators.
  */
-var MetadataArgsStorage = /** @class */ (function () {
-    function MetadataArgsStorage() {
+class MetadataArgsStorage {
+    constructor() {
         // -------------------------------------------------------------------------
         // Properties
         // -------------------------------------------------------------------------
         this.controllers = [];
         this.middlewares = [];
-        this.uses = [];
         this.actions = [];
         this.results = [];
         this.params = [];
@@ -18,45 +17,39 @@ var MetadataArgsStorage = /** @class */ (function () {
     // -------------------------------------------------------------------------
     // Public Methods
     // -------------------------------------------------------------------------
-    MetadataArgsStorage.prototype.findControllerMetadatasForClasses = function (classes) {
-        return this.controllers.filter(function (ctrl) {
-            return classes.filter(function (cls) { return ctrl.target === cls; }).length > 0;
+    findControllerMetadatasForClasses(classes) {
+        return this.controllers.filter(ctrl => {
+            return classes.filter(cls => ctrl.target === cls).length > 0;
         });
-    };
-    MetadataArgsStorage.prototype.findMiddlewareMetadatasForClasses = function (classes) {
-        return this.middlewares.filter(function (middleware) {
-            return classes.filter(function (cls) { return middleware.target === cls; }).length > 0;
+    }
+    findMiddlewareMetadatasForClasses(classes) {
+        return this.middlewares.filter(middleware => {
+            return classes.filter(cls => middleware.target === cls).length > 0;
         });
-    };
-    MetadataArgsStorage.prototype.findActionsWithTarget = function (target) {
-        return this.actions.filter(function (action) { return action.target === target; });
-    };
-    MetadataArgsStorage.prototype.filterUsesWithTarget = function (target) {
-        return this.uses.filter(function (use) {
-            return use.target === target;
-        });
-    };
-    MetadataArgsStorage.prototype.findResutlsWithTargetAndMethod = function (target, methodName) {
-        return this.results.filter(function (result) {
+    }
+    findActionsWithTarget(target) {
+        return this.actions.filter(action => action.target === target);
+    }
+    findResutlsWithTargetAndMethod(target, methodName) {
+        return this.results.filter(result => {
             return result.target === target && result.method === methodName;
         });
-    };
-    MetadataArgsStorage.prototype.findParamsWithTargetAndMethod = function (target, methodName) {
-        return this.params.filter(function (param) {
+    }
+    findParamsWithTargetAndMethod(target, methodName) {
+        return this.params.filter(param => {
             return param.target === target && param.method === methodName;
         });
-    };
+    }
     /**
      * Removes all saved metadata.
      */
-    MetadataArgsStorage.prototype.reset = function () {
+    reset() {
         this.controllers = [];
         this.middlewares = [];
         this.actions = [];
         this.params = [];
-    };
-    return MetadataArgsStorage;
-}());
+    }
+}
 exports.MetadataArgsStorage = MetadataArgsStorage;
 
 //# sourceMappingURL=MetadataArgsStorage.js.map

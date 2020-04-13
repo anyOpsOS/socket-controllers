@@ -1,26 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var container_1 = require("../container");
-var ControllerMetadata = /** @class */ (function () {
+const container_1 = require("../container");
+class ControllerMetadata {
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
-    function ControllerMetadata(args) {
+    constructor(args) {
         this.target = args.target;
         this.namespace = args.namespace;
     }
-    Object.defineProperty(ControllerMetadata.prototype, "instance", {
-        // -------------------------------------------------------------------------
-        // Accessors
-        // -------------------------------------------------------------------------
-        get: function () {
-            return container_1.getFromContainer(this.target);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return ControllerMetadata;
-}());
+    // -------------------------------------------------------------------------
+    // Accessors
+    // -------------------------------------------------------------------------
+    get instance() {
+        return container_1.getFromContainer(this.target);
+    }
+}
 exports.ControllerMetadata = ControllerMetadata;
 
 //# sourceMappingURL=ControllerMetadata.js.map

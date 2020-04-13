@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ResultTypes_1 = require("./types/ResultTypes");
-var ActionMetadata = /** @class */ (function () {
+const ResultTypes_1 = require("./types/ResultTypes");
+class ActionMetadata {
     // -------------------------------------------------------------------------
     // Public Methods
     // -------------------------------------------------------------------------
-    function ActionMetadata(controllerMetadata, args) {
+    constructor(controllerMetadata, args) {
         this.controllerMetadata = controllerMetadata;
         this.name = args.name;
         this.target = args.target;
@@ -15,42 +15,22 @@ var ActionMetadata = /** @class */ (function () {
     // -------------------------------------------------------------------------
     // Public Methods
     // -------------------------------------------------------------------------
-    ActionMetadata.prototype.executeAction = function (params) {
+    executeAction(params) {
         return this.controllerMetadata.instance[this.method].apply(this.controllerMetadata.instance, params);
-    };
-    Object.defineProperty(ActionMetadata.prototype, "emitOnSuccess", {
-        // -------------------------------------------------------------------------
-        // Accessors
-        // -------------------------------------------------------------------------
-        get: function () {
-            return this.results.find(function (resultHandler) { return resultHandler.type === ResultTypes_1.ResultTypes.EMIT_ON_SUCCESS; });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActionMetadata.prototype, "emitOnFail", {
-        get: function () {
-            return this.results.find(function (resultHandler) { return resultHandler.type === ResultTypes_1.ResultTypes.EMIT_ON_FAIL; });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActionMetadata.prototype, "skipEmitOnEmptyResult", {
-        get: function () {
-            return this.results.find(function (resultHandler) { return resultHandler.type === ResultTypes_1.ResultTypes.SKIP_EMIT_ON_EMPTY_RESULT; });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ActionMetadata.prototype, "returnAck", {
-        get: function () {
-            return this.results.find(function (resultHandler) { return resultHandler.type === ResultTypes_1.ResultTypes.RETURN_ACK; });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return ActionMetadata;
-}());
+    }
+    // -------------------------------------------------------------------------
+    // Accessors
+    // -------------------------------------------------------------------------
+    get emitOnSuccess() {
+        return this.results.find(resultHandler => resultHandler.type === ResultTypes_1.ResultTypes.EMIT_ON_SUCCESS);
+    }
+    get emitOnFail() {
+        return this.results.find(resultHandler => resultHandler.type === ResultTypes_1.ResultTypes.EMIT_ON_FAIL);
+    }
+    get skipEmitOnEmptyResult() {
+        return this.results.find(resultHandler => resultHandler.type === ResultTypes_1.ResultTypes.SKIP_EMIT_ON_EMPTY_RESULT);
+    }
+}
 exports.ActionMetadata = ActionMetadata;
 
 //# sourceMappingURL=ActionMetadata.js.map
